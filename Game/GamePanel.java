@@ -1,4 +1,5 @@
 package mainGame;
+
 import javax.swing.JPanel;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -121,12 +122,37 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g2.dispose();	
 	}
 
-	public void keyPressed(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyPressed(KeyEvent key) {
+		int keyCode = key.getKeyCode();
+		if(keyCode == KeyEvent.VK_LEFT){
+			player.setLeft(true);
+		}
+		if(keyCode == KeyEvent.VK_RIGHT){
+			player.setRight(true);
+		}
+		if(keyCode == KeyEvent.VK_UP){
+			player.setUp(true);
+		}
+		if(keyCode == KeyEvent.VK_DOWN){
+			player.setDown(true);
+		}
 		
 	}
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
+	public void keyReleased(KeyEvent key) {
+		int keyCode = key.getKeyCode();
+		
+		if(keyCode == KeyEvent.VK_LEFT){
+			player.setLeft(false);
+		}
+		if(keyCode == KeyEvent.VK_RIGHT){
+			player.setRight(false);
+		}
+		if(keyCode == KeyEvent.VK_DOWN){
+			player.setDown(false);
+		}
+		if(keyCode == KeyEvent.VK_UP){
+			player.setUp(false);
+		}
 		
 	}
 	public void keyTyped(KeyEvent arg0) {
