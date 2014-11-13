@@ -25,6 +25,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	private Player player;
 	
+	private boolean nextTurn;
+	
 	
 	public GamePanel(){
 		super();
@@ -47,6 +49,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		player = new Player();
 		
 		running = true;
+		nextTurn = false;
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
@@ -93,8 +96,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	
 	private void gameUpdate() {
-		// TODO Auto-generated method stub
-		player.update();
+		if(nextTurn){
+			player.update();
+			nextTurn = false;
+		}
 	}
 	
 	private void gameRender() {
@@ -126,15 +131,22 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		int keyCode = key.getKeyCode();
 		if(keyCode == KeyEvent.VK_LEFT){
 			player.setLeft(true);
+			nextTurn = true;
 		}
 		if(keyCode == KeyEvent.VK_RIGHT){
 			player.setRight(true);
+			nextTurn = true;
 		}
 		if(keyCode == KeyEvent.VK_UP){
 			player.setUp(true);
+			nextTurn = true;
 		}
 		if(keyCode == KeyEvent.VK_DOWN){
 			player.setDown(true);
+			nextTurn = true;
+		}
+		if(keyCode == KeyEvent.VK_SPACE){
+			nextTurn = true;
 		}
 		
 	}

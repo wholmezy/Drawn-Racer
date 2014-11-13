@@ -16,16 +16,14 @@ public class Player {
 	private int speedX;
 	private int speedY;
 	
-	private boolean turnLeft;
-	private boolean turnRight;
 	
 	private Color color1;
+	private Color color2;
 	
 	private boolean left;
 	private boolean right;
 	private boolean up;
 	private boolean down;
-	private boolean nextTurn;
 	
 	
 	
@@ -38,23 +36,21 @@ public class Player {
 		
 		speedX = 0;
 		speedY = 0;
-
-		
-		left = false;
-		right = false;
 		
 		color1 = Color.black;
+		color2 = Color.GRAY;
 	}
 	
 	public int getX(){ return x; }
 	public int getY(){ return y; }
 	
+	
 	public void setX(int dx){ x = dx; }
 	public void setY(int dy){ y = dy; }
-	public void setLeft(boolean b){ left = b; nextTurn = b; }
-	public void setRight(boolean b){ right = b; nextTurn = b; }
-	public void setDown(boolean b){ down = b; nextTurn = b; }
-	public void setUp(boolean b){ up = b; nextTurn = b; }
+	public void setLeft(boolean b){ left = b;}
+	public void setRight(boolean b){ right = b;}
+	public void setDown(boolean b){ down = b;}
+	public void setUp(boolean b){ up = b;}
 	
 	
 	public void update(){
@@ -74,8 +70,8 @@ public class Player {
 			x += speedX;
 			
 			
-			if(x < width){ x = width; }
-			if(y < height){ y = height; }
+			if(x < width){ x = 0; }
+			if(y < height){ y = 0; }
 			
 			if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
 			if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
@@ -84,6 +80,8 @@ public class Player {
 	public void draw(Graphics2D g){
 		g.setColor(color1);
 		g.fillRect(x, y, width, height);
+		g.setColor(color2);
+		g.fillRect(x + speedX, y + speedY, width, height);
 	}
 	
 }
