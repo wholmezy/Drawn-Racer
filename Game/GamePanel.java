@@ -12,8 +12,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	public static int WIDTH = 600;
 	public static int HEIGHT = 600;
 	
+	public int squareSize = 600 / 30;
+	
 	private Thread thread;
 	boolean running;
+	
+	private boolean nextTurn;
+	private boolean startGame;
+	private boolean start;
+	private boolean w, a, s, d;
+	
 	
 	private BufferedImage image;
 	private Graphics2D g;
@@ -25,8 +33,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	private Player player;
 	
-	private boolean nextTurn;
-	
+
 	
 	public GamePanel(){
 		super();
@@ -49,7 +56,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		player = new Player();
 		
 		running = true;
+		
 		nextTurn = false;
+		startGame = false;
+		start = false;
+		
+		w = false;
+		a = false;
+		s = false;
+		d = false;
 		
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
@@ -96,28 +111,59 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	
 	private void gameUpdate() {
-		if(nextTurn){
+		
+		if(start){
+			if(s){
+				player.setDown(s);
+				s = false;
+			}
+			if(w){
+				player.setUp(w);
+				w = false;
+			}
+			if(a){
+				player.setLeft(a);
+				a = false;
+			}
+			if(d){
+				player.setRight(d);
+				d = false;
+			}
 			player.update();
+			player.setDown(s);
+			player.setUp(w);
+			player.setLeft(a);
+			player.setRight(d);
 			nextTurn = false;
+			start = false;
+			
 		}
+		
 	}
 	
 	private void gameRender() {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
-		
+		g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 10));
 		g.setColor(Color.RED);
 		g.drawString("FPS: " + (int) averageFPS, 10, 10);
 		g.setColor(Color.BLACK);
-		// X start pos, Y start pos, X end pos, Y end pos
-		for(int i = 1; i <= numLines; i++){
-			g.drawLine(0, (HEIGHT / 30) * i, WIDTH, (HEIGHT / 30) * i);
-			g.drawLine((HEIGHT / 30) * i, 0, (HEIGHT / 30) * i, HEIGHT);
+		
+		
+		if(!startGame){
+			g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
+			g.drawString("Press Enter to start the game!", WIDTH / 2 - 130, HEIGHT / 2);
 		}
-		
-		player.draw(g);
-		
+		else{
+			// X start pos, Y start pos, X end pos, Y end pos
+			for(int i = 1; i <= numLines; i++){
+				g.drawLine(0, (HEIGHT / 30) * i, WIDTH, (HEIGHT / 30) * i);
+				g.drawLine((HEIGHT / 30) * i, 0, (HEIGHT / 30) * i, HEIGHT);
+			}
+			
+			player.draw(g);
+		}
 		
 	}
 	//DOne
@@ -129,29 +175,60 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 
 	public void keyPressed(KeyEvent key) {
 		int keyCode = key.getKeyCode();
+		
 		if(keyCode == KeyEvent.VK_LEFT){
-			player.setLeft(true);
-			nextTurn = true;
+			
+			a = true;
+
+			w = false;
+			d = false;
+			s = false;
+			//start = true;
+			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_RIGHT){
-			player.setRight(true);
-			nextTurn = true;
+			
+			d = true;
+
+			w = false;
+			s = false;
+			a = false;
+			//start = true;
+			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_UP){
-			player.setUp(true);
-			nextTurn = true;
+			
+			w = true;
+
+			s = false;
+			d = false;
+			a = false;
+			//start = true;
+			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_DOWN){
-			player.setDown(true);
-			nextTurn = true;
+			
+			//start = true;
+			player.update2();
+			
+			s = true;
+			
+			w = false;
+			d = false;
+			a = false;
 		}
 		if(keyCode == KeyEvent.VK_SPACE){
-			nextTurn = true;
+			start = true;
+		}
+		if(keyCode == KeyEvent.VK_ENTER){
+			startGame = true;
+			
 		}
 		
 	}
 	public void keyReleased(KeyEvent key) {
 		int keyCode = key.getKeyCode();
+		
 		
 		if(keyCode == KeyEvent.VK_LEFT){
 			player.setLeft(false);
@@ -160,10 +237,14 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			player.setRight(false);
 		}
 		if(keyCode == KeyEvent.VK_DOWN){
+			
 			player.setDown(false);
+			
 		}
 		if(keyCode == KeyEvent.VK_UP){
+		
 			player.setUp(false);
+			
 		}
 		
 	}
