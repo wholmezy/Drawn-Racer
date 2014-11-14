@@ -23,6 +23,7 @@ public class Player {
 	
 	private Color color1;
 	private Color color2;
+	private Color color3;
 	
 	private boolean left;
 	private boolean right;
@@ -46,6 +47,7 @@ public class Player {
 		
 		color1 = Color.black;
 		color2 = Color.GRAY;
+		color3 = Color.DARK_GRAY;
 		
 		start = false;
 	}
@@ -93,24 +95,32 @@ public class Player {
 	}
 	public void update2(){
 		if(left){
-			
+			if(x + storeSpeedX > x + speedX - width&&
+			   y + storeSpeedY > y + speedY - height && //Up
+			   y + storeSpeedY < y + speedY + height){ //Down		
 				storeSpeedX -= GamePanel.HEIGHT / 30;
-			
+			}
 		}
 		if(right){
-			
+			if(x + storeSpeedX < x + speedX + width &&
+			   y + storeSpeedY > y + speedY - height && //Up
+			   y + storeSpeedY < y + speedY + height){ //Down
 				storeSpeedX += GamePanel.HEIGHT / 30;
-			
+			}
 		}
 		if(up){
-			
+			if(y + storeSpeedY > y + speedY - height &&
+			   x + storeSpeedX > x + speedX - width && //Left
+			   x + storeSpeedX < x + speedX + width){ //Right
 				storeSpeedY -= GamePanel.WIDTH / 30;
-			
+			}
 		}
 		if(down){
-			
+			if(y + storeSpeedY < y + speedY + height &&
+			   x + storeSpeedX > x + speedX - width && //Left
+			   x + storeSpeedX < x + speedX + width){ //Right
 				storeSpeedY += GamePanel.WIDTH / 30;
-			
+			}
 		}
 		
 		if(x2 < width){ x2 = 0; }
@@ -129,8 +139,9 @@ public class Player {
 		g.setColor(color1);
 		g.fillRect(x, y, width, height);
 		g.setColor(color2);
+		g.fillRect(x + speedX, y + speedY, width, height);
+		g.setColor(color3);
 		g.fillRect(x + storeSpeedX, y + storeSpeedY, width, height);
-		
 	}
 	
 }

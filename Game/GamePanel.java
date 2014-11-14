@@ -177,7 +177,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		int keyCode = key.getKeyCode();
 		
 		if(keyCode == KeyEvent.VK_LEFT){
-			
+			player.setLeft(true);
 			a = true;
 
 			w = false;
@@ -187,7 +187,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_RIGHT){
-			
+			player.setRight(true);
 			d = true;
 
 			w = false;
@@ -197,7 +197,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_UP){
-			
+			player.setUp(true);
 			w = true;
 
 			s = false;
@@ -207,12 +207,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_DOWN){
-			
+			player.setDown(true);
 			//start = true;
 			player.update2();
-			
 			s = true;
-			
 			w = false;
 			d = false;
 			a = false;
