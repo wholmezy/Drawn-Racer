@@ -100,12 +100,18 @@ public class Player {
 			   y + storeSpeedY < y + speedY + height){ //Down		
 				storeSpeedX -= GamePanel.HEIGHT / 30;
 			}
+			else{
+				storeSpeedX = speedX;
+			}
 		}
 		if(right){
 			if(x + storeSpeedX < x + speedX + width &&
 			   y + storeSpeedY > y + speedY - height && //Up
 			   y + storeSpeedY < y + speedY + height){ //Down
 				storeSpeedX += GamePanel.HEIGHT / 30;
+			}
+			else{
+				storeSpeedX = speedX;
 			}
 		}
 		if(up){
@@ -114,6 +120,9 @@ public class Player {
 			   x + storeSpeedX < x + speedX + width){ //Right
 				storeSpeedY -= GamePanel.WIDTH / 30;
 			}
+			else{
+				storeSpeedY = speedY;
+			}
 		}
 		if(down){
 			if(y + storeSpeedY < y + speedY + height &&
@@ -121,7 +130,11 @@ public class Player {
 			   x + storeSpeedX < x + speedX + width){ //Right
 				storeSpeedY += GamePanel.WIDTH / 30;
 			}
+			else{
+				storeSpeedY = speedY;
+			}
 		}
+		
 		
 		if(x2 < width){ x2 = 0; }
 		if(y2 < height){ y2 = 0; }
@@ -139,8 +152,8 @@ public class Player {
 		g.setColor(color1);
 		g.fillRect(x, y, width, height);
 		g.setColor(color2);
-		g.fillRect(x + speedX, y + speedY, width, height);
-		g.setColor(color3);
+		//g.fillRect(x + speedX, y + speedY, width, height);
+		g.setColor(color2);
 		g.fillRect(x + storeSpeedX, y + storeSpeedY, width, height);
 	}
 	
