@@ -17,7 +17,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private Thread thread;
 	boolean running;
 	
-	private boolean nextTurn;
 	private boolean startGame;
 	private boolean start;
 	private boolean w, a, s, d;
@@ -33,7 +32,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	private Player player;
 	
-
+	private TileMap tileMap;
 	
 	public GamePanel(){
 		super();
@@ -51,13 +50,20 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		addKeyListener(this);
 	}
 	
+	public void init(){
+		
+	}
+	
 	public void run() {
+		running = true;
+		
+		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+		g = (Graphics2D) image.getGraphics();
+		
+		tileMap = new TileMap("C:\\Users\\Wholm_000\\map1.txt", squareSize);
 		
 		player = new Player();
 		
-		running = true;
-		
-		nextTurn = false;
 		startGame = false;
 		start = false;
 		
@@ -66,9 +72,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		s = false;
 		d = false;
 		
-		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-		g = (Graphics2D) image.getGraphics();
-
 		long startTime;
 		long URDTimeMillis;
 		long waitTime;
@@ -111,6 +114,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	
 	
 	private void gameUpdate() {
+		tileMap.update();
 		
 		if(start){
 			if(s){
@@ -134,7 +138,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			player.setUp(w);
 			player.setLeft(a);
 			player.setRight(d);
-			nextTurn = false;
 			start = false;
 			
 		}
@@ -142,6 +145,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	}
 	
 	private void gameRender() {
+		
+		
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, WIDTH, HEIGHT);
 		
@@ -157,6 +162,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		}
 		else{
 			// X start pos, Y start pos, X end pos, Y end pos
+			tileMap.draw(g);
 			for(int i = 1; i <= numLines; i++){
 				g.drawLine(0, (HEIGHT / 30) * i, WIDTH, (HEIGHT / 30) * i);
 				g.drawLine((HEIGHT / 30) * i, 0, (HEIGHT / 30) * i, HEIGHT);
