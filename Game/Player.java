@@ -10,7 +10,6 @@ public class Player {
 	private int x;
 	private int y;
 
-	
 	private int width;
 	private int height;
 	
@@ -35,7 +34,7 @@ public class Player {
 	
 	
 	
-	public Player(){
+	public Player(TileMap tm){
 		width = GamePanel.WIDTH / 30;
 		height = GamePanel.HEIGHT / 30;
 		
@@ -53,7 +52,7 @@ public class Player {
 		
 		start = false;
 		
-		tileMap = new TileMap("C:\\Users\\Wholm_000\\map1.txt", GamePanel.squareSize);
+		tileMap = tm;
 		
 	}
 	
@@ -100,12 +99,14 @@ public class Player {
 		}
 		if(storeSpeedY == tempSpeedY){
 			y += storeSpeedY;
+			speedY = storeSpeedY;
 		}
 		else{
 			y += speedY;
 		}
 		if(storeSpeedX == tempSpeedX){
 			x += storeSpeedX;
+			speedX = storeSpeedX;
 		}
 		else{
 			x += speedX;
@@ -182,6 +183,7 @@ public class Player {
 		g.fillRect(x, y, width, height);
 		tempSpeedX = speedX;
 		tempSpeedY = speedY;
+		
 		g.setColor(color2);
 		//g.fillRect(x + speedX, y + speedY, width, height);
 		g.setColor(color2);

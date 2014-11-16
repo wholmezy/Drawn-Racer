@@ -62,7 +62,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		
 		tileMap = new TileMap("C:\\Users\\Wholm_000\\map1.txt", squareSize);
 		
-		player = new Player();
+		player = new Player(tileMap);
 		
 		startGame = false;
 		start = false;
@@ -163,6 +163,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		else{
 			// X start pos, Y start pos, X end pos, Y end pos
 			tileMap.draw(g);
+			g.setColor(Color.BLACK);
 			for(int i = 1; i <= numLines; i++){
 				g.drawLine(0, (HEIGHT / 30) * i, WIDTH, (HEIGHT / 30) * i);
 				g.drawLine((HEIGHT / 30) * i, 0, (HEIGHT / 30) * i, HEIGHT);
