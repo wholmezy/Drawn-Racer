@@ -11,6 +11,9 @@ public class TileMap {
 	private int mapWidth;
 	private int mapHeight;
 	
+	private Color color1 = Color.WHITE;
+	private Color color2 = Color.BLUE;
+	
 	public TileMap(String s, int tileSize){
 		this.tileSize = tileSize;
 		
@@ -33,6 +36,26 @@ public class TileMap {
 		}
 		catch(Exception e){}
 	}
+	
+	public int getx() { return x; }
+	public int gety() { return y; }
+	
+	public int getColTile(int x){
+		return x / tileSize;
+	}
+	public int getRowTile(int y){
+		return y / tileSize;
+	}
+	public int getTile(int row, int col){
+		return map[row][col];
+	}
+	public int getTileSize(){
+		return tileSize;
+	}
+	
+	public void setx(int i) { x = i; }
+	public void sety(int i) { y = i; }
+	
 	public void update(){
 		
 	}
@@ -43,10 +66,10 @@ public class TileMap {
 				int rc = map[row][col];
 				
 				if(rc == 0){
-					g.setColor(Color.BLUE);
+					g.setColor(color2);
 				}
 				if(rc == 1){
-					g.setColor(Color.WHITE);
+					g.setColor(color1);
 				}
 				
 				g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);

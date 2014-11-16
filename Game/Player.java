@@ -9,8 +9,7 @@ public class Player {
 	
 	private int x;
 	private int y;
-	private int x2;
-	private int y2;
+
 	
 	private int width;
 	private int height;
@@ -19,7 +18,8 @@ public class Player {
 	private int speedY;
 	private int storeSpeedX;
 	private int storeSpeedY;
-	
+	private int tempSpeedX;
+	private int tempSpeedY;
 	
 	private Color color1;
 	private Color color2;
@@ -30,6 +30,8 @@ public class Player {
 	private boolean up;
 	private boolean down;
 	private boolean start;
+	
+	private TileMap tileMap;
 	
 	
 	
@@ -50,6 +52,9 @@ public class Player {
 		color3 = Color.DARK_GRAY;
 		
 		start = false;
+		
+		tileMap = new TileMap("C:\\Users\\Wholm_000\\map1.txt", GamePanel.squareSize);
+		
 	}
 	
 	public int getX(){ return x; }
@@ -71,86 +76,112 @@ public class Player {
 
 		if(left){
 			speedX -= GamePanel.HEIGHT / 30;
+			/*if(x2 + storeSpeedX == speedX){
+				speedX = tempSpeedX;
+			}*/
 		}
 		if(right){
 			speedX += GamePanel.HEIGHT / 30;
+			/*if(x2 + storeSpeedX == speedX){
+				speedX = tempSpeedX;
+			}*/
 		}
-		if(up){
+		if(up){		
 			speedY -= GamePanel.WIDTH / 30;
+			/*if(y2 + storeSpeedY == speedY){
+				speedY = tempSpeedY;
+			}*/
 		}
-		if(down){
+		if(down){	
 			speedY += GamePanel.WIDTH / 30;
+			/*if(y2 + storeSpeedY == speedY){
+				speedY = tempSpeedY;
+			}*/
 		}
-		y += speedY;
-		x += speedX;
-			
-			
+		if(storeSpeedY == tempSpeedY){
+			y += storeSpeedY;
+		}
+		else{
+			y += speedY;
+		}
+		if(storeSpeedX == tempSpeedX){
+			x += storeSpeedX;
+		}
+		else{
+			x += speedX;
+		}
+		
 		if(x < width){ x = 0; }
 		if(y < height){ y = 0; }
 		
 		if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
 		if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
 		
+		//move map
+		tileMap.setx((int) (GamePanel.WIDTH / 2 - x));
+		tileMap.sety((int) (GamePanel.HEIGHT / 2 - y));
+		
 		
 	}
 	public void update2(){
+		
 		if(left){
+			//storeSpeedX = speedX - width;
+			
 			if(x + storeSpeedX > x + speedX - width&&
 			   y + storeSpeedY > y + speedY - height && //Up
 			   y + storeSpeedY < y + speedY + height){ //Down		
 				storeSpeedX -= GamePanel.HEIGHT / 30;
 			}
 			else{
-				storeSpeedX = speedX;
+				storeSpeedX = speedX; // - GamePanel.HEIGHT / 30;
 			}
 		}
 		if(right){
+			
+			//storeSpeedX = speedX + width;
+			
 			if(x + storeSpeedX < x + speedX + width &&
 			   y + storeSpeedY > y + speedY - height && //Up
 			   y + storeSpeedY < y + speedY + height){ //Down
 				storeSpeedX += GamePanel.HEIGHT / 30;
 			}
 			else{
-				storeSpeedX = speedX;
+				storeSpeedX = speedX; // + GamePanel.HEIGHT / 30;
 			}
 		}
 		if(up){
+			//storeSpeedY = speedY - height;
 			if(y + storeSpeedY > y + speedY - height &&
 			   x + storeSpeedX > x + speedX - width && //Left
 			   x + storeSpeedX < x + speedX + width){ //Right
 				storeSpeedY -= GamePanel.WIDTH / 30;
 			}
 			else{
-				storeSpeedY = speedY;
+				storeSpeedY = speedY; // - GamePanel.WIDTH / 30;
 			}
 		}
 		if(down){
+			//storeSpeedY = speedY + height;
 			if(y + storeSpeedY < y + speedY + height &&
 			   x + storeSpeedX > x + speedX - width && //Left
 			   x + storeSpeedX < x + speedX + width){ //Right
 				storeSpeedY += GamePanel.WIDTH / 30;
 			}
 			else{
-				storeSpeedY = speedY;
+				storeSpeedY = speedY; // + GamePanel.WIDTH / 30;
 			}
 		}
 		
-		
-		if(x2 < width){ x2 = 0; }
-		if(y2 < height){ y2 = 0; }
-		
-		if(x2 > GamePanel.WIDTH - width){ x2 = GamePanel.WIDTH - width; }
-		if(y2 > GamePanel.HEIGHT - height) { y2 = GamePanel.HEIGHT - height; }
-		
 		start = false;
-		
-		
-		
 		
 	}
 	public void draw(Graphics2D g){
+		
 		g.setColor(color1);
 		g.fillRect(x, y, width, height);
+		tempSpeedX = speedX;
+		tempSpeedY = speedY;
 		g.setColor(color2);
 		//g.fillRect(x + speedX, y + speedY, width, height);
 		g.setColor(color2);
