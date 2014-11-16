@@ -70,8 +70,8 @@ public class Player {
 	public void update(){
 
 		//move map
-		tileMap.setx( - x);
-		tileMap.sety( - y);
+		tileMap.setx(GamePanel.WIDTH / 2 - x);
+		tileMap.sety(GamePanel.HEIGHT / 2  - y);
 		
 		if(left){
 			speedX -= GamePanel.HEIGHT / GamePanel.squareSize;
@@ -102,11 +102,11 @@ public class Player {
 			x += speedX;
 		}
 		
-		if(x < width){ x = 0; }
-		if(y < height){ y = 0; }
+		//if(x < width){ x = 0; }
+		//if(y < height){ y = 0; }
 		
-		if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
-		if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
+		//if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
+		//if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
 		
 		
 
@@ -166,15 +166,18 @@ public class Player {
 	}
 	public void draw(Graphics2D g){
 		
+		int tx = tileMap.getx() ;
+		int ty = tileMap.gety();
+		
 		g.setColor(color1);
-		g.fillRect(x, y, width, height);
+		g.fillRect(tx + x, ty + y, width, height);
 		tempSpeedX = speedX;
 		tempSpeedY = speedY;
 		
 		g.setColor(color2);
 		//g.fillRect(x + speedX, y + speedY, width, height);
 		g.setColor(color2);
-		g.fillRect(x + storeSpeedX, y + storeSpeedY, width, height);
+		g.fillRect(tx + x + storeSpeedX, ty + y + storeSpeedY, width, height);
 	}
 	
 }
