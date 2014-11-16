@@ -1,10 +1,6 @@
 package mainGame;
 import java.awt.*;
 
-
-
-
-
 public class Player {
 	
 	private int x;
@@ -35,10 +31,10 @@ public class Player {
 	
 	
 	public Player(TileMap tm){
-		width = GamePanel.WIDTH / 30;
-		height = GamePanel.HEIGHT / 30;
+		width = GamePanel.WIDTH / GamePanel.squareSize;
+		height = GamePanel.HEIGHT / GamePanel.squareSize;
 		
-		x = GamePanel.WIDTH / 2;
+		x = GamePanel.WIDTH / GamePanel.squareSize;
 		y = GamePanel.HEIGHT / 2;
 		
 		speedX = 0;
@@ -73,29 +69,23 @@ public class Player {
 	
 	public void update(){
 
+		//move map
+		tileMap.setx( - x);
+		tileMap.sety( - y);
+		
 		if(left){
-			speedX -= GamePanel.HEIGHT / 30;
-			/*if(x2 + storeSpeedX == speedX){
-				speedX = tempSpeedX;
-			}*/
+			speedX -= GamePanel.HEIGHT / GamePanel.squareSize;
+
 		}
 		if(right){
-			speedX += GamePanel.HEIGHT / 30;
-			/*if(x2 + storeSpeedX == speedX){
-				speedX = tempSpeedX;
-			}*/
+			speedX += GamePanel.HEIGHT / GamePanel.squareSize;
 		}
 		if(up){		
-			speedY -= GamePanel.WIDTH / 30;
-			/*if(y2 + storeSpeedY == speedY){
-				speedY = tempSpeedY;
-			}*/
+			speedY -= GamePanel.WIDTH / GamePanel.squareSize;
+
 		}
 		if(down){	
-			speedY += GamePanel.WIDTH / 30;
-			/*if(y2 + storeSpeedY == speedY){
-				speedY = tempSpeedY;
-			}*/
+			speedY += GamePanel.WIDTH / GamePanel.squareSize;
 		}
 		if(storeSpeedY == tempSpeedY){
 			y += storeSpeedY;
@@ -118,59 +108,56 @@ public class Player {
 		if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
 		if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
 		
-		//move map
-		tileMap.setx((int) (GamePanel.WIDTH / 2 - x));
-		tileMap.sety((int) (GamePanel.HEIGHT / 2 - y));
+		
+
 		
 		
 	}
 	public void update2(){
 		
 		if(left){
-			//storeSpeedX = speedX - width;
 			
 			if(x + storeSpeedX > x + speedX - width&&
 			   y + storeSpeedY > y + speedY - height && //Up
 			   y + storeSpeedY < y + speedY + height){ //Down		
-				storeSpeedX -= GamePanel.HEIGHT / 30;
+				storeSpeedX -= GamePanel.HEIGHT / GamePanel.squareSize;
 			}
 			else{
-				storeSpeedX = speedX; // - GamePanel.HEIGHT / 30;
+				storeSpeedX = speedX; 
 			}
 		}
 		if(right){
 			
-			//storeSpeedX = speedX + width;
 			
 			if(x + storeSpeedX < x + speedX + width &&
 			   y + storeSpeedY > y + speedY - height && //Up
 			   y + storeSpeedY < y + speedY + height){ //Down
-				storeSpeedX += GamePanel.HEIGHT / 30;
+				storeSpeedX += GamePanel.HEIGHT / GamePanel.squareSize;
 			}
 			else{
-				storeSpeedX = speedX; // + GamePanel.HEIGHT / 30;
+				storeSpeedX = speedX; 
 			}
 		}
 		if(up){
-			//storeSpeedY = speedY - height;
+			
 			if(y + storeSpeedY > y + speedY - height &&
 			   x + storeSpeedX > x + speedX - width && //Left
 			   x + storeSpeedX < x + speedX + width){ //Right
-				storeSpeedY -= GamePanel.WIDTH / 30;
+				storeSpeedY -= GamePanel.WIDTH / GamePanel.squareSize;
 			}
 			else{
-				storeSpeedY = speedY; // - GamePanel.WIDTH / 30;
+				storeSpeedY = speedY; 
 			}
 		}
 		if(down){
-			//storeSpeedY = speedY + height;
+			
 			if(y + storeSpeedY < y + speedY + height &&
 			   x + storeSpeedX > x + speedX - width && //Left
 			   x + storeSpeedX < x + speedX + width){ //Right
-				storeSpeedY += GamePanel.WIDTH / 30;
+				storeSpeedY += GamePanel.WIDTH / GamePanel.squareSize;
 			}
 			else{
-				storeSpeedY = speedY; // + GamePanel.WIDTH / 30;
+				storeSpeedY = speedY; 
 			}
 		}
 		

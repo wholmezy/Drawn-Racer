@@ -9,8 +9,8 @@ import java.awt.image.*;
 //Drawn Racer
 public class GamePanel extends JPanel implements Runnable, KeyListener {
 	//Fields
-	public static int WIDTH = 600;
-	public static int HEIGHT = 600;
+	public static int WIDTH = 800;
+	public static int HEIGHT = 800;
 	
 	public static int squareSize = 600 / 30;
 	
@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private int FPS = 30;
 	private double averageFPS;
 	
-	public int numLines = 30;
+	public int numLines = WIDTH / squareSize;
 	
 	private Player player;
 	
@@ -60,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
 		
-		tileMap = new TileMap("C:\\Users\\Wholm_000\\map1.txt", squareSize);
+		tileMap = new TileMap("C:\\Users\\Wholm_000\\map3.txt", WIDTH / squareSize);
 		
 		player = new Player(tileMap);
 		
@@ -71,6 +71,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		a = false;
 		s = false;
 		d = false;
+		
+		//to fix tilemap position.
+		player.update();
 		
 		long startTime;
 		long URDTimeMillis;
@@ -165,8 +168,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			tileMap.draw(g);
 			g.setColor(Color.BLACK);
 			for(int i = 1; i <= numLines; i++){
-				g.drawLine(0, (HEIGHT / 30) * i, WIDTH, (HEIGHT / 30) * i);
-				g.drawLine((HEIGHT / 30) * i, 0, (HEIGHT / 30) * i, HEIGHT);
+				g.drawLine(0, (HEIGHT / squareSize) * i, WIDTH, (HEIGHT / squareSize) * i);
+				g.drawLine((HEIGHT / squareSize) * i, 0, (HEIGHT / squareSize) * i, HEIGHT);
 			}
 			
 			player.draw(g);
@@ -190,7 +193,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			w = false;
 			d = false;
 			s = false;
-			//start = true;
 			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_RIGHT){
@@ -200,7 +202,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			w = false;
 			s = false;
 			a = false;
-			//start = true;
+
 			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_UP){
@@ -210,7 +212,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			s = false;
 			d = false;
 			a = false;
-			//start = true;
+
 			player.update2();
 		}
 		if(keyCode == KeyEvent.VK_DOWN){
