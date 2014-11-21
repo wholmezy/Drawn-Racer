@@ -28,11 +28,6 @@ public class Player {
 	
 	private TileMap tileMap;
 	
-	private boolean topLeft;
-	private boolean topRight;
-	private boolean bottomLeft;
-	private boolean bottomRight;
-	
 	public Player(TileMap tm){
 		width = GamePanel.WIDTH / GamePanel.squareSize;
 		height = GamePanel.HEIGHT / GamePanel.squareSize;
@@ -68,18 +63,6 @@ public class Player {
 	public void setRight(boolean b){ right = b;}
 	public void setDown(boolean b){ down = b;}
 	public void setUp(boolean b){ up = b;}
-	
-	
-	private void calculateCorners(int x, int y){
-		int leftTile = tileMap.getColTile(x - width / 2);
-		int rightTile = tileMap.getColTile(x + width / 2 - 1);
-		int topTile = tileMap.getRowTile(y - height / 2);
-		int bottomTile = tileMap.getRowTile(y + height / 2 - 1);
-		topLeft = tileMap.getTile(topTile, leftTile) == 0;
-		topRight = tileMap.getTile(topTile,  rightTile) == 0;
-		bottomLeft = tileMap.getTile(bottomTile, leftTile) == 0;	
-		bottomRight = tileMap.getTile(bottomTile, rightTile) == 0 ;
-	}
 	
 	public void update(){
 
@@ -154,8 +137,8 @@ public class Player {
 		int tx = tileMap.getx() ;
 		int ty = tileMap.gety();
 		
-		int speedX = tx + x + storeSpeedX;
-		int speedY = ty + y + storeSpeedY;
+		int accX = tx + x + storeSpeedX;
+		int accY = ty + y + storeSpeedY;
 		int carX = tx + x;
 		int carY = ty + y;
 		
@@ -172,23 +155,48 @@ public class Player {
 		//g.fillRect(x + speedX, y + speedY, width, height);
 		g.setColor(color2);
 		//this is the fake one. . .. .
-		g.fillRect(speedX, speedY, width, height);
+		g.fillRect(accX, accY, width, height);
 		
-		
-		
-		
-		
-		//Lines between speed and player.
 		g.setColor(Color.RED);
-		g.drawLine(speedX +  width / 2, 
-				speedY + height / 2, 
-				carX + width / 2, 
-				carY + storeSpeedY + height / 2);
+		
+		// Collision detect!
+		int col = tileMap.getColTile(x + storeSpeedX);
+		int row = tileMap.getRowTile(y + storeSpeedY);
+		
+		int hey = 0;;
+		
+		if(col >= 20 || row >= 15 || col < 0 || row < 0){
+			hey = 0;
+		}
+		else{
+			hey = tileMap.getTile(row, col); 
+		}
+		
+		g.drawString("Value of col = " + col, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2 + 50);
+		g.drawString("Value of row = " + row, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2 - 50);
+		g.drawString("Value of tile = " + hey, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2);
+		
+		if(hey == 0){
+			g.fillRect(accX, accY, width, height);
+		}
+		
+		int diffPosX = accX - carX;
+		int diffPosY = accY - carY;
+		
+		int colAcc = tileMap.getColTile(x + storeSpeedX);
+		int rowAcc = tileMap.getRowTile(y + storeSpeedY);
+		
+		int colCar = tileMap.getColTile(x + storeSpeedX);
+		int rowCar = tileMap.getRowTile(y + storeSpeedY);
+		
+		//Lines between acc and player.
+		
+		
 		
 		g.drawLine(carX + width / 2, //end X
-				speedY + height / 2,  //end Y
-				carX + width / 2,  //start X
-				carY + height / 2); // start Y
+				carY + height / 2, //end y
+				accX + width / 2, //start x
+				accY + height / 2); //start Y
 	}
 	
 }
