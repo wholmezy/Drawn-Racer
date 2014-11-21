@@ -101,58 +101,6 @@ public class Player {
 		if(down){	
 			speedY += GamePanel.WIDTH / GamePanel.squareSize;
 		}
-		/*int currCol = tileMap.getColTile(x);
-		int currRow = tileMap.getRowTile(y);
-		
-		int tox = x + speedX;
-		int toy = y + speedY;
-		
-		int tempx = x;
-		int tempy = y;
-		
-		calculateCorners(x, toy);
-		if(speedY < 0){
-			if(topLeft || topRight){
-				speedY = 0;
-				tempy = currRow * tileMap.getTileSize() * height / 2;
-			}
-			else{
-				tempy += speedY;
-			}
-		}
-		if(speedY > 0){
-			if(bottomLeft || bottomRight){
-				speedY = 0;
-				tempy = (currRow + 1) * tileMap.getTileSize() - height / 2;
-			}
-			else{
-				tempy += speedY;
-			}
-		}
-		
-		calculateCorners(tox, y);
-		if(speedX < 0){
-			if(topLeft || bottomLeft){
-				speedX = 0;
-				tempx = currCol * tileMap.getTileSize() * width / 2;
-			}
-			else{
-				tempx += speedX;
-			}
-			
-		}
-		if(speedX > 0){
-			if(topRight || bottomRight){
-				speedX = 0;
-				tempx = (currCol + 1) * tileMap.getTileSize() * width / 2;
-			}
-			else{
-				tempx += speedX;
-			}
-		}
-		x = tempx;
-		y = tempy;
-		*/
 		
 		if(storeSpeedY == tempSpeedY){
 			y += storeSpeedY;
@@ -169,13 +117,6 @@ public class Player {
 			x += speedX;
 		}
 		
-		//if(x < width){ x = 0; }
-		//if(y < height){ y = 0; }
-		
-		//if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
-		//if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
-		
-		//Collision with map.
 		
 		
 		
@@ -188,51 +129,22 @@ public class Player {
 		//Make sure speed stays in circle.
 		if(left){
 			
-			
-			//Make sure speed stays in circle.
-			if(x + storeSpeedX > x + speedX - width&&
-			   y + storeSpeedY > y + speedY - height && //Up
-			   y + storeSpeedY < y + speedY + height){ //Down		
-				storeSpeedX -= GamePanel.HEIGHT / GamePanel.squareSize;
-			}
-			else{
-				storeSpeedX = speedX; 
-			}
+			storeSpeedX = speedX - width;
+			storeSpeedY = speedY;
 		}
 		if(right){
-			
-			
-			if(x + storeSpeedX < x + speedX + width &&
-			   y + storeSpeedY > y + speedY - height && //Up
-			   y + storeSpeedY < y + speedY + height){ //Down
-				storeSpeedX += GamePanel.HEIGHT / GamePanel.squareSize;
-			}
-			else{
-				storeSpeedX = speedX; 
-			}
+			storeSpeedX = speedX + width;
+			storeSpeedY = speedY;
 		}
 		if(up){
-			
-			if(y + storeSpeedY > y + speedY - height &&
-			   x + storeSpeedX > x + speedX - width && //Left
-			   x + storeSpeedX < x + speedX + width){ //Right
-				storeSpeedY -= GamePanel.WIDTH / GamePanel.squareSize;
-			}
-			else{
-				storeSpeedY = speedY; 
-			}
+			storeSpeedY = speedY - height;
+			storeSpeedX = speedX;
 		}
 		if(down){
-			
-			if(y + storeSpeedY < y + speedY + height &&
-			   x + storeSpeedX > x + speedX - width && //Left
-			   x + storeSpeedX < x + speedX + width){ //Right
-				storeSpeedY += GamePanel.WIDTH / GamePanel.squareSize;
-			}
-			else{
-				storeSpeedY = speedY; 
-			}
+			storeSpeedY = speedY + height;
+			storeSpeedX = speedX;
 		}
+		
 		
 		start = false;
 		
@@ -242,14 +154,14 @@ public class Player {
 		int tx = tileMap.getx() ;
 		int ty = tileMap.gety();
 		
-		int carX = tx + x + storeSpeedX;
-		int carY = ty + y + storeSpeedY;
-		int speedX = tx + x;
-		int speedY = ty + y;
+		int speedX = tx + x + storeSpeedX;
+		int speedY = ty + y + storeSpeedY;
+		int carX = tx + x;
+		int carY = ty + y;
 		
 		g.setColor(color1);
 		//This is the real one...
-		g.fillRect(speedX, speedY, width, height);
+		g.fillRect(carX, carY, width, height);
 		tempSpeedX = speedX;
 		tempSpeedY = speedY;
 		
@@ -260,7 +172,7 @@ public class Player {
 		//g.fillRect(x + speedX, y + speedY, width, height);
 		g.setColor(color2);
 		//this is the fake one. . .. .
-		g.fillRect(carX, carY, width, height);
+		g.fillRect(speedX, speedY, width, height);
 		
 		
 		
@@ -268,15 +180,15 @@ public class Player {
 		
 		//Lines between speed and player.
 		g.setColor(Color.RED);
-		g.drawLine(carX +  width / 2, 
-				carY + height / 2, 
-				speedX + width / 2, 
-				speedY + storeSpeedY + height / 2);
+		g.drawLine(speedX +  width / 2, 
+				speedY + height / 2, 
+				carX + width / 2, 
+				carY + storeSpeedY + height / 2);
 		
-		g.drawLine(speedX + width / 2, //end X
-				carY + height / 2,  //end Y
-				speedX + width / 2,  //start X
-				speedY + height / 2); // start Y
+		g.drawLine(carX + width / 2, //end X
+				speedY + height / 2,  //end Y
+				carX + width / 2,  //start X
+				carY + height / 2); // start Y
 	}
 	
 }
