@@ -28,7 +28,10 @@ public class Player {
 	
 	private TileMap tileMap;
 	
-	
+	private boolean topLeft;
+	private boolean topRight;
+	private boolean bottomLeft;
+	private boolean bottomRight;
 	
 	public Player(TileMap tm){
 		width = GamePanel.WIDTH / GamePanel.squareSize;
@@ -67,6 +70,17 @@ public class Player {
 	public void setUp(boolean b){ up = b;}
 	
 	
+	private void calculateCorners(int x, int y){
+		int leftTile = tileMap.getColTile(x - width / 2);
+		int rightTile = tileMap.getColTile(x + width / 2 - 1);
+		int topTile = tileMap.getRowTile(y - height / 2);
+		int bottomTile = tileMap.getRowTile(y + height / 2 - 1);
+		topLeft = tileMap.getTile(topTile, leftTile) == 0;
+		topRight = tileMap.getTile(topTile,  rightTile) == 0;
+		bottomLeft = tileMap.getTile(bottomTile, leftTile) == 0;	
+		bottomRight = tileMap.getTile(bottomTile, rightTile) == 0 ;
+	}
+	
 	public void update(){
 
 		//move map
@@ -87,6 +101,59 @@ public class Player {
 		if(down){	
 			speedY += GamePanel.WIDTH / GamePanel.squareSize;
 		}
+		/*int currCol = tileMap.getColTile(x);
+		int currRow = tileMap.getRowTile(y);
+		
+		int tox = x + speedX;
+		int toy = y + speedY;
+		
+		int tempx = x;
+		int tempy = y;
+		
+		calculateCorners(x, toy);
+		if(speedY < 0){
+			if(topLeft || topRight){
+				speedY = 0;
+				tempy = currRow * tileMap.getTileSize() * height / 2;
+			}
+			else{
+				tempy += speedY;
+			}
+		}
+		if(speedY > 0){
+			if(bottomLeft || bottomRight){
+				speedY = 0;
+				tempy = (currRow + 1) * tileMap.getTileSize() - height / 2;
+			}
+			else{
+				tempy += speedY;
+			}
+		}
+		
+		calculateCorners(tox, y);
+		if(speedX < 0){
+			if(topLeft || bottomLeft){
+				speedX = 0;
+				tempx = currCol * tileMap.getTileSize() * width / 2;
+			}
+			else{
+				tempx += speedX;
+			}
+			
+		}
+		if(speedX > 0){
+			if(topRight || bottomRight){
+				speedX = 0;
+				tempx = (currCol + 1) * tileMap.getTileSize() * width / 2;
+			}
+			else{
+				tempx += speedX;
+			}
+		}
+		x = tempx;
+		y = tempy;
+		*/
+		
 		if(storeSpeedY == tempSpeedY){
 			y += storeSpeedY;
 			speedY = storeSpeedY;
@@ -108,15 +175,21 @@ public class Player {
 		//if(x > GamePanel.WIDTH - width){ x = GamePanel.WIDTH - width; }
 		//if(y > GamePanel.HEIGHT - height) { y = GamePanel.HEIGHT - height; }
 		
+		//Collision with map.
 		
-
+		
+		
+		
 		
 		
 	}
 	public void update2(){
 		
+		//Make sure speed stays in circle.
 		if(left){
 			
+			
+			//Make sure speed stays in circle.
 			if(x + storeSpeedX > x + speedX - width&&
 			   y + storeSpeedY > y + speedY - height && //Up
 			   y + storeSpeedY < y + speedY + height){ //Down		
@@ -169,15 +242,41 @@ public class Player {
 		int tx = tileMap.getx() ;
 		int ty = tileMap.gety();
 		
+		int carX = tx + x + storeSpeedX;
+		int carY = ty + y + storeSpeedY;
+		int speedX = tx + x;
+		int speedY = ty + y;
+		
 		g.setColor(color1);
-		g.fillRect(tx + x, ty + y, width, height);
+		//This is the real one...
+		g.fillRect(speedX, speedY, width, height);
 		tempSpeedX = speedX;
 		tempSpeedY = speedY;
+		
+		
+		
 		
 		g.setColor(color2);
 		//g.fillRect(x + speedX, y + speedY, width, height);
 		g.setColor(color2);
-		g.fillRect(tx + x + storeSpeedX, ty + y + storeSpeedY, width, height);
+		//this is the fake one. . .. .
+		g.fillRect(carX, carY, width, height);
+		
+		
+		
+		
+		
+		//Lines between speed and player.
+		g.setColor(Color.RED);
+		g.drawLine(carX +  width / 2, 
+				carY + height / 2, 
+				speedX + width / 2, 
+				speedY + storeSpeedY + height / 2);
+		
+		g.drawLine(speedX + width / 2, //end X
+				carY + height / 2,  //end Y
+				speedX + width / 2,  //start X
+				speedY + height / 2); // start Y
 	}
 	
 }

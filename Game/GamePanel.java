@@ -60,7 +60,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g = (Graphics2D) image.getGraphics();
 		
-		tileMap = new TileMap("C:\\Users\\Wholm_000\\map3.txt", WIDTH / squareSize);
+		tileMap = new TileMap("C:\\Users\\Wholm_000\\map2.txt", WIDTH / squareSize);
 		
 		player = new Player(tileMap);
 		
