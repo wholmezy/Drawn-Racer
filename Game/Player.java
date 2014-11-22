@@ -145,8 +145,7 @@ public class Player {
 		g.setColor(color1);
 		//This is the real one...
 		g.fillRect(carX, carY, width, height);
-		tempSpeedX = speedX;
-		tempSpeedY = speedY;
+		
 		
 		
 		
@@ -163,7 +162,7 @@ public class Player {
 		int col = tileMap.getColTile(x + storeSpeedX);
 		int row = tileMap.getRowTile(y + storeSpeedY);
 		
-		int hey = 0;;
+		int hey = 0;
 		
 		if(col >= 20 || row >= 15 || col < 0 || row < 0){
 			hey = 0;
@@ -180,14 +179,169 @@ public class Player {
 			g.fillRect(accX, accY, width, height);
 		}
 		
-		int diffPosX = accX - carX;
-		int diffPosY = accY - carY;
 		
-		int colAcc = tileMap.getColTile(x + storeSpeedX);
-		int rowAcc = tileMap.getRowTile(y + storeSpeedY);
+		tempSpeedX = speedX;
+		tempSpeedY = speedY;
 		
-		int colCar = tileMap.getColTile(x + storeSpeedX);
-		int rowCar = tileMap.getRowTile(y + storeSpeedY);
+		g.drawString("Value of tempSpeedX = " + tempSpeedX, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2 - 100);
+		
+		//TODO
+		
+		//This draws cars from accelopointer to car.
+		int yello = 0;
+		
+		boolean complete = false;
+		
+		int botR = 1;
+		int botL = 1;
+		int topR = 1;
+		int topL = 1;
+		int downS = 1;
+		int upS = 1;
+		int leftS = 1;
+		int rightS = 1;
+		
+		g.setColor(Color.MAGENTA);
+		
+		while(!complete){
+			
+			//BotRight
+			if(tempSpeedX > 0 && tempSpeedY > 0){
+				
+				g.fillRect(carX + width * botR, carY + height * botR, width, height);
+				
+				botR++;
+				
+				tempSpeedX -= GamePanel.WIDTH / GamePanel.squareSize;
+				tempSpeedY -= GamePanel.HEIGHT / GamePanel.squareSize;
+				
+				yello++;
+				
+			}
+			
+			//BotLeft
+			else if(tempSpeedX < 0 && tempSpeedY > 0){
+				
+				g.fillRect(carX - width * botL, carY + height * botL, width, height);
+				
+				botL++;
+				
+				tempSpeedX += GamePanel.WIDTH / GamePanel.squareSize;
+				tempSpeedY -= GamePanel.HEIGHT / GamePanel.squareSize;
+				
+				//yello++;
+			
+			}
+			
+			//TopRight
+			else if(tempSpeedX > 0 && tempSpeedY < 0){
+				
+				g.fillRect(carX + width * topR, carY - height * topR, width, height);
+				
+				topR++;
+				
+				tempSpeedX -= GamePanel.WIDTH / GamePanel.squareSize;
+				tempSpeedY += GamePanel.HEIGHT / GamePanel.squareSize;
+				
+				//yello++;
+			
+			}
+			
+			//TopLeft
+			else if(tempSpeedX < 0 && tempSpeedY < 0){
+				
+				g.fillRect(carX - width * topL, carY - height * topL, width, height);
+				
+				topL++;
+				
+				tempSpeedX += GamePanel.WIDTH / GamePanel.squareSize;
+				tempSpeedY += GamePanel.HEIGHT / GamePanel.squareSize;
+				
+				yello++;
+				
+			}
+			
+			//Down
+			
+			else if(tempSpeedX == 0 && tempSpeedY > 0){
+					
+				g.fillRect(carX, carY + height * downS, width, height);
+				
+				downS++;
+				
+				tempSpeedY -= GamePanel.HEIGHT / GamePanel.squareSize;
+				
+				//yello++;
+			
+			}
+			
+			//Up
+			else if(tempSpeedX == 0 && tempSpeedY < 0){
+				
+				g.fillRect(carX, carY - height * upS, width, height);
+				
+				upS++;
+				
+				tempSpeedY += GamePanel.HEIGHT / GamePanel.squareSize;
+				
+				//yello++;
+			
+			}
+			
+			//Right
+			else if(tempSpeedX > 0 && tempSpeedY == 0){
+				
+				g.fillRect(carX + width * rightS, carY, width, height);
+				
+				rightS++;
+				
+				tempSpeedX -= GamePanel.WIDTH / GamePanel.squareSize;
+				
+				//yello++;
+			}
+			
+			//Left
+			else if(tempSpeedX < 0 && tempSpeedY == 0){
+			
+				g.fillRect(carX - width * leftS, carY, width, height);
+				
+				leftS++;
+				
+				tempSpeedX += GamePanel.WIDTH / GamePanel.squareSize;
+				
+				//yello++;
+			
+			}
+			
+			
+			
+			else if(tempSpeedX == 0 && tempSpeedY == 0){
+				complete = true;
+			}
+			
+		}
+		g.setColor(Color.RED);
+		
+		g.drawString("Value of yello = " + yello, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2 - 75);
+		
+		//g.fillRect((int) (carX + cubeHalf), (int) (carY + cubeHalf), width, height);
+		
+		//TopRight
+		//g.fillRect(carX + height, carY - height, width, height);
+		
+		//TopLeft
+		//g.fillRect(carX - height, carY - height, width, height);
+		
+		//BotLeft
+		//g.fillRect(carX - height, carY + height, width, height);
+		
+		//BotRight
+		//g.fillRect(carX + height, carY + height, width, height);
+		
+		
+		
+		
+		
 		
 		//Lines between acc and player.
 		
