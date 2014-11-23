@@ -85,33 +85,19 @@ public class Player {
 			speedY += GamePanel.WIDTH / GamePanel.squareSize;
 		}
 		
-		if(storeSpeedY == tempSpeedY){
-			y += storeSpeedY;
-			speedY = storeSpeedY;
-		}
-		else{
-			y += speedY;
-		}
-		if(storeSpeedX == tempSpeedX){
-			x += storeSpeedX;
-			speedX = storeSpeedX;
-		}
-		else{
-			x += speedX;
-		}
+		speedX = drawCheck(speedX, speedY, 1);
+		speedY = drawCheck(speedX, speedY, 2);
 		
-		
-		
-		
-		
-		
+		x += speedX;
+		y += speedY;
 		
 	}
 	public void update2(){
 		
+		storeSpeedX = speedX;
+		storeSpeedY = speedY;
 		//Make sure speed stays in circle.
 		if(left){
-			
 			storeSpeedX = speedX - width;
 			storeSpeedY = speedY;
 		}
@@ -131,6 +117,43 @@ public class Player {
 		
 		start = false;
 		
+		
+	}
+	
+
+	
+	public void draw(Graphics2D g){
+		
+		int tx = tileMap.getx() ;
+		int ty = tileMap.gety();
+		
+		int accX = tx + x + storeSpeedX;
+		int accY = ty + y + storeSpeedY;
+		int carX = tx + x;
+		int carY = ty + y;
+		
+		g.setColor(color1);
+		//This is the real one...
+		
+		g.fillRect(carX, carY, width, height);
+		
+		
+		
+		g.setColor(color2);
+		//g.fillRect(x + speedX, y + speedY, width, height);
+		g.setColor(color2);
+		//this is the fake one. . .. .
+		g.fillRect(accX, accY, width, height);
+		
+		g.setColor(Color.RED);
+		
+		
+		//Lines between acc and player.
+		
+		g.drawLine(carX + width / 2, //end X
+				carY + height / 2, //end y
+				accX + width / 2, //start x
+				accY + height / 2); //start Y
 	}
 	
 	public boolean checkMap(int x, int y){
@@ -156,7 +179,9 @@ public class Player {
 		return check;
 	}
 	
-	public void drawCheck(int speedX, int speedY, Graphics2D g, int carX, int carY){
+	
+	
+	public int drawCheck(int speedX, int speedY, int xory){
 		
 		tempSpeedX = speedX;
 		tempSpeedY = speedY;
@@ -175,8 +200,7 @@ public class Player {
 		int leftS = 1;
 		int rightS = 1;
 		
-		g.setColor(Color.MAGENTA);
-		
+	
 		while(!complete){
 			
 			//BotRight
@@ -187,7 +211,9 @@ public class Player {
 				check = checkMap(x + width * botR, y + height * botR);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				//g.fillRect(carX + width * botR, carY + height * botR, width, height);
@@ -207,7 +233,9 @@ public class Player {
 				check = checkMap(x - width * botL, y + height * botL);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				
@@ -230,7 +258,9 @@ public class Player {
 				check = checkMap(x + width * topR, y - height * topR);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				//g.fillRect(carX + width * topR, carY - height * topR, width, height);
@@ -250,7 +280,9 @@ public class Player {
 				check = checkMap(x - width * topL, y - height * topL);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				//g.fillRect(carX - width * topL, carY - height * topL, width, height);
@@ -272,7 +304,9 @@ public class Player {
 				check = checkMap(x, y + height * downS);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				//g.fillRect(carX, carY + height * downS, width, height);
@@ -292,7 +326,9 @@ public class Player {
 				check = checkMap(x, y - height * upS);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				//g.fillRect(carX, carY - height * upS, width, height);
@@ -311,7 +347,9 @@ public class Player {
 				check = checkMap(x + width * rightS, y);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				
@@ -331,7 +369,9 @@ public class Player {
 				check = checkMap(x - width * leftS, y);
 				
 				if(check == true){
-					g.fillRect(carX, carY, width, height);
+					speedX = 0;
+					speedY = 0;
+					break;
 				}
 				
 				
@@ -351,84 +391,12 @@ public class Player {
 			}
 			
 		}
-		
-	}
-	
-	public void draw(Graphics2D g){
-		
-		int tx = tileMap.getx() ;
-		int ty = tileMap.gety();
-		
-		int accX = tx + x + storeSpeedX;
-		int accY = ty + y + storeSpeedY;
-		int carX = tx + x;
-		int carY = ty + y;
-		
-		g.setColor(color1);
-		//This is the real one...
-		g.fillRect(carX, carY, width, height);
-		
-		
-		g.setColor(color2);
-		//g.fillRect(x + speedX, y + speedY, width, height);
-		g.setColor(color2);
-		//this is the fake one. . .. .
-		g.fillRect(accX, accY, width, height);
-		
-		g.setColor(Color.RED);
-		
-		// Collision detect!
-		int col = tileMap.getColTile(x + storeSpeedX);
-		int row = tileMap.getRowTile(y + storeSpeedY);
-		
-		int hey = 0;
-		
-		if(col >= 20 || row >= 15 || col < 0 || row < 0){
-			hey = 0;
+		if(xory == 1){
+			return speedX;
 		}
 		else{
-			hey = tileMap.getTile(row, col); 
+			return speedY;
 		}
-		
-		g.drawString("Value of col = " + col, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2 + 50);
-		g.drawString("Value of row = " + row, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2 - 50);
-		g.drawString("Value of tile = " + hey, GamePanel.WIDTH / 2 - 130, GamePanel.HEIGHT / 2);
-		
-		if(hey == 0){
-			g.fillRect(accX, accY, width, height);
-		}
-		
-		drawCheck(speedX, speedY, g, carX, carY);
-		
-		g.setColor(Color.RED);
-		
-		//g.fillRect((int) (carX + cubeHalf), (int) (carY + cubeHalf), width, height);
-		
-		//TopRight
-		//g.fillRect(carX + height, carY - height, width, height);
-		
-		//TopLeft
-		//g.fillRect(carX - height, carY - height, width, height);
-		
-		//BotLeft
-		//g.fillRect(carX - height, carY + height, width, height);
-		
-		//BotRight
-		//g.fillRect(carX + height, carY + height, width, height);
-		
-		
-		
-		
-		
-		
-		//Lines between acc and player.
-		
-		
-		
-		g.drawLine(carX + width / 2, //end X
-				carY + height / 2, //end y
-				accX + width / 2, //start x
-				accY + height / 2); //start Y
 	}
 	
 }
