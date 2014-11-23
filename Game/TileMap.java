@@ -52,6 +52,9 @@ public class TileMap {
 	public int getTileSize(){
 		return tileSize;
 	}
+	public int getMapHeight() { return mapHeight; }
+	public int getMapWidth() { return mapWidth; }
+	
 	
 	public void setx(int i) { x = i; }
 	public void sety(int i) { y = i; }

@@ -165,7 +165,7 @@ public class Player {
 		
 		boolean check = false;
 		
-		if(colC >= 20 || rowC >= 15 || colC < 0 || rowC < 0){
+		if(colC >= tileMap.getMapWidth() || rowC >= tileMap.getMapHeight() || colC < 0 || rowC < 0){
 			checker = 0;
 		}
 		else{

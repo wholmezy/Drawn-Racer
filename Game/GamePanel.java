@@ -18,9 +18,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	boolean running;
 	
 	private boolean startGame;
+	private boolean multiGame;
 	private boolean start;
 	private boolean w, a, s, d;
 	
+	int menuItem;
+	int menuItemSize;
 	
 	private BufferedImage image;
 	private Graphics2D g;
@@ -67,6 +70,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		startGame = false;
 		start = false;
 		
+		menuItemSize = 2;
+		menuItem = 0;
+		
 		w = false;
 		a = false;
 		s = false;
@@ -110,9 +116,6 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				totalTime = 0;
 			}
 		}
-		
-		
-		
 	}
 	
 	
@@ -161,9 +164,37 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		
 		if(!startGame){
 			g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
-			g.drawString("Press Enter to start the game!", WIDTH / 2 - 130, HEIGHT / 2);
+			//g.drawString("Press Enter to start the game!", WIDTH / 2 - 130, HEIGHT / 2);
+			
+			g.setColor(Color.BLACK);
+			g.fillRect(WIDTH / 2 - 130, HEIGHT / 2 - 100, 270, 50);
+			
+			
+			//Game mode select.
+			
+			g.setColor(Color.WHITE);
+			if(menuItem == 0){
+				g.fillRect(WIDTH / 2 - 120, HEIGHT / 2 - 95, 250, 40);
+				
+				g.setColor(Color.BLACK);
+			}
+			g.drawString("SINGLEPLAYER", WIDTH / 2 - 65, HEIGHT / 2 - 68);
+			
+			g.setColor(Color.BLACK);
+			g.fillRect(WIDTH / 2 - 130,  HEIGHT / 2 - 32,  270,  50);
+			
+			g.setColor(Color.WHITE);
+			if(menuItem == 1){
+				
+				g.fillRect(WIDTH / 2 - 120, HEIGHT / 2 - 27, 250, 40);
+				
+				g.setColor(Color.BLACK);
+			}
+			g.drawString("MULTIPLAYER", WIDTH / 2 - 65, HEIGHT / 2);
+			
+			g.setColor(Color.BLACK);
 		}
-		else{
+		else if(startGame){
 			// X start pos, Y start pos, X end pos, Y end pos
 			tileMap.draw(g);
 			g.setColor(Color.BLACK);
@@ -174,6 +205,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			
 			player.draw(g);
 		}
+		else if(multiGame){
+			
+		}
 		
 	}
 	//DOne
@@ -182,54 +216,76 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g2.drawImage(image, 0, 0, null);
 		g2.dispose();	
 	}
-
+	
+	
+	
 	public void keyPressed(KeyEvent key) {
 		int keyCode = key.getKeyCode();
 		
 		if(keyCode == KeyEvent.VK_LEFT){
-			player.setLeft(true);
-			a = true;
-
-			w = false;
-			d = false;
-			s = false;
-			player.update2();
+			if(startGame){
+				player.setLeft(true);
+				a = true;
+	
+				w = false;
+				d = false;
+				s = false;
+				player.update2();
+			}
 		}
 		if(keyCode == KeyEvent.VK_RIGHT){
-			player.setRight(true);
-			d = true;
-
-			w = false;
-			s = false;
-			a = false;
-
-			player.update2();
+			if(startGame){
+				player.setRight(true);
+				d = true;
+	
+				w = false;
+				s = false;
+				a = false;
+	
+				player.update2();
+			}
 		}
 		if(keyCode == KeyEvent.VK_UP){
-			player.setUp(true);
-			w = true;
-
-			s = false;
-			d = false;
-			a = false;
-
-			player.update2();
+			if(!startGame){
+				menuItem = (menuItem + 1) % menuItemSize;
+			}
+			else{
+				player.setUp(true);
+				w = true;
+	
+				s = false;
+				d = false;
+				a = false;
+	
+				player.update2();
+			}
 		}
 		if(keyCode == KeyEvent.VK_DOWN){
-			player.setDown(true);
-			//start = true;
-			player.update2();
-			s = true;
-			w = false;
-			d = false;
-			a = false;
+			if(!startGame){
+				menuItem = (menuItem + 1) % menuItemSize;
+			}
+			else{
+				player.setDown(true);
+				//start = true;
+				player.update2();
+				s = true;
+				w = false;
+				d = false;
+				a = false;
+			}
 		}
 		if(keyCode == KeyEvent.VK_SPACE){
-			start = true;
+			if(startGame){
+				start = true;
+			}
 		}
 		if(keyCode == KeyEvent.VK_ENTER){
-			startGame = true;
-			
+			if(menuItem == 0){
+				startGame = true;
+			}
+			else{
+				multiGame = true;
+			}
 		}
 		
 	}
