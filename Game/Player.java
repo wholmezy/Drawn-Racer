@@ -28,7 +28,7 @@ public class Player {
 	
 	private TileMap tileMap;
 	
-	public Player(TileMap tm){
+	public Player(TileMap tm, int color){
 		width = GamePanel.WIDTH / GamePanel.squareSize;
 		height = GamePanel.HEIGHT / GamePanel.squareSize;
 		
@@ -40,7 +40,13 @@ public class Player {
 		storeSpeedX = 0;
 		storeSpeedY = 0;
 		
-		color1 = Color.black;
+		if(color == 1){
+			color1 = Color.ORANGE;
+		}
+		else{
+			color1 = Color.PINK;
+		}
+		
 		color2 = Color.GRAY;
 		color3 = Color.DARK_GRAY;
 		
@@ -150,10 +156,10 @@ public class Player {
 		
 		//Lines between acc and player.
 		
-		g.drawLine(carX + width / 2, //end X
+		/*g.drawLine(carX + width / 2, //end X
 				carY + height / 2, //end y
 				accX + width / 2, //start x
-				accY + height / 2); //start Y
+				accY + height / 2); //start Y*/
 	}
 	
 	public boolean checkMap(int x, int y){
