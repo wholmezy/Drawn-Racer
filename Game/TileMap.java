@@ -12,7 +12,7 @@ public class TileMap {
 	private int mapHeight;
 	
 	private Color color1 = Color.WHITE;
-	private Color color2 = Color.BLUE;
+	private Color color2 = Color.BLACK;
 	
 	public TileMap(String s, int tileSize){
 		this.tileSize = tileSize;
@@ -73,6 +73,9 @@ public class TileMap {
 				}
 				if(rc == 1){
 					g.setColor(color1);
+				}
+				if(rc == 2){
+					g.setColor(Color.RED);
 				}
 				
 				g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);

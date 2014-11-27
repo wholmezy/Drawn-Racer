@@ -15,23 +15,31 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	public static int WIDTH = 800;
 	public static int HEIGHT = 800;
 	
-	public static int squareSize = 600 / 30;
+	public static int squareSize = 50;
+	
+	public static boolean gameOver;
 	
 	private Thread thread;
 	boolean running;
 	
-	private boolean singlePlayStart;
 	private boolean anyGameStart;
 	private boolean multiGame;
-	private boolean multiGameStart2;
-	private boolean multGameStart3;
+	
 	private boolean start;
 	private boolean playerTurn1;
 	private boolean playerTurn2;
+	
+	
+	
 	private boolean w, a, s, d;
 	
 	int menuItem;
 	int menuItemSize;
+	
+	public static int winningPlayer;
+	public int numPlayers;
+	private int winnerPlayer;
+	
 	
 	private BufferedImage image;
 	private Graphics2D g;
@@ -39,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 	private int FPS = 30;
 	private double averageFPS;
 	
-	public int numLines = WIDTH / squareSize;
+	
 	
 	private Player player;
 	private Player player1;
@@ -80,18 +88,23 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		tileMap2 = new TileMap("map2.txt", WIDTH / squareSize);
 		
 		
-		// the number on the constructor is the color, either 1 or else.
-		player = new Player(tileMap, 1);
-		player1 = new Player(tileMap2, 1);
-		player2 = new Player(tileMap2, 2);
+		
+		
+		// The first number on the constructor is the color, either 1 or else.
+		// The second number is which player it is.
+		player = new Player(tileMap, 1, 1);
+		player1 = new Player(tileMap2, 1, 1);
+		player2 = new Player(tileMap2, 2, 2);
 		
 		//Start is the pauser inbetween moves.
 		start = false;
-		//StartGame is the singleplayer starter.
-		singlePlayStart = false;
+		
+		numPlayers = 0;
+		winningPlayer = 0;
 		playerTurn2 = true;
 		anyGameStart = false;
-		multiGameStart2 = false;
+		
+		numPlayers = 0;
 		
 		menuItemSize = 2;
 		menuItem = 0;
@@ -101,14 +114,16 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		s = false;
 		d = false;
 		
+		gameOver = false;
+		
 		//to fix tilemap position.
-		player.update();
+		player.update(numPlayers);
 		
 		
-		player1.update();
+		player1.update(numPlayers);
 		
 		
-		player2.update();
+		player2.update(numPlayers);
 		
 		
 		
@@ -155,11 +170,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		
 		if(start){
 			if(s){
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setDown(s);
 					s = false;
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setDown(s);
 						s = false;
@@ -171,11 +186,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				}
 			}
 			if(w){
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setUp(w);
 					w = false;
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setUp(w);
 						w = false;
@@ -187,11 +202,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				}
 			}
 			if(a){
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setLeft(a);
 					a = false;
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setLeft(a);
 						a = false;
@@ -204,11 +219,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				
 			}
 			if(d){
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setRight(d);
 					d = false;
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setRight(d);
 						d = false;
@@ -219,10 +234,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 					}
 				}
 			}
-			if(singlePlayStart){
+			if(numPlayers == 1){
 				updatePlayer(player);
 			}
-			if(multiGameStart2){
+			if(numPlayers == 2){
 				if(playerTurn1){
 					updatePlayer(player1);
 				}
@@ -235,7 +250,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		
 	}
 	private void updatePlayer(Player player){
-		player.update();
+		player.update(numPlayers);
 		player.setDown(s);
 		player.setUp(w);
 		player.setLeft(a);
@@ -262,7 +277,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g.setColor(Color.BLACK);
 		
 		
-		if(!anyGameStart && !multiGame && !singlePlayStart){
+		if(!anyGameStart && !multiGame && numPlayers == 0){
 			g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
 			//g.drawString("Press Enter to start the game!", WIDTH / 2 - 130, HEIGHT / 2);
 			
@@ -295,16 +310,15 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			
 			g.setColor(Color.BLACK);
 		}
-		else if(singlePlayStart){
+		else if(numPlayers == 1 && !gameOver){
 			// X start pos, Y start pos, X end pos, Y end pos
 			tileMap.draw(g);
 			g.setColor(Color.BLACK);
-			for(int i = 1; i <= numLines; i++){
+			for(int i = 1; i <= squareSize; i++){
 				g.drawLine(0, (HEIGHT / squareSize) * i, WIDTH, (HEIGHT / squareSize) * i);
 				g.drawLine((HEIGHT / squareSize) * i, 0, (HEIGHT / squareSize) * i, HEIGHT);
 			}
-			
-			player.draw(g);
+			player.draw(g, true);
 		}
 		else if(multiGame){
 			
@@ -337,16 +351,28 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			
 			
 		}
-		else if(multiGameStart2){
+		else if(numPlayers == 2 && !gameOver){
 			tileMap2.draw(g);
 			g.setColor(Color.BLACK);
-			for(int i = 1; i <= numLines; i++){
+			for(int i = 1; i <= squareSize; i++){
 				g.drawLine(0, (HEIGHT / squareSize) * i, WIDTH, (HEIGHT / squareSize) * i);
 				g.drawLine((HEIGHT / squareSize) * i, 0, (HEIGHT / squareSize) * i, HEIGHT);
 			}
 			
-			player1.draw(g);
-			player2.draw(g);
+			player1.draw(g, playerTurn1);
+			player2.draw(g, playerTurn2);
+		}
+		else if(gameOver){
+			String winner;
+			if(winningPlayer == 1){
+				winner = "ORANGE";
+			}
+			else{
+				winner = "PURPLE";
+			}
+			g.setFont(new Font("impact", Font.PLAIN, 40));
+			g.drawString(winner + " WON THE GAME!", WIDTH / 2 - 200, HEIGHT / 2 - 68);
+			g.drawString("CONGRATULATIONS. YOU ARE THE BEST!", WIDTH / 2 - 300, HEIGHT / 2);
 		}
 		
 	}
@@ -364,12 +390,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		
 		if(keyCode == KeyEvent.VK_LEFT){
 			if(anyGameStart){
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setLeft(true);
 					
 					player.update2();
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setLeft(true);
 						
@@ -391,11 +417,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		
 		if(keyCode == KeyEvent.VK_RIGHT){
 			if(anyGameStart){
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setRight(true);
 					player.update2();
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setRight(true);
 						
@@ -424,11 +450,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				menuItem = (menuItem + 1) % menuItemSize;
 			}
 			else{
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setUp(true);
 					player.update2();
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setUp(true);
 						
@@ -456,12 +482,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				menuItem = (menuItem + 1) % menuItemSize;
 			}
 			else{
-				if(singlePlayStart){
+				if(numPlayers == 1){
 					player.setDown(true);
 					//start = true;
 					player.update2();
 				}
-				else if(multiGameStart2){
+				else if(numPlayers == 2){
 					if(playerTurn1){
 						player1.setDown(true);
 						
@@ -494,7 +520,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		if(keyCode == KeyEvent.VK_ENTER){
 			//Menu Select
 			if(menuItem == 0 && !multiGame){
-				singlePlayStart = true;
+				numPlayers = 1;
 				anyGameStart = true;
 			}
 			else if(menuItem == 1 && !multiGame){
@@ -502,7 +528,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			}
 			else if(menuItem == 0 && multiGame){
 				anyGameStart = true;
-				multiGameStart2 = true;
+				numPlayers = 2;
 				multiGame = false;
 			}
 			else if(menuItem == 1 && multiGame){
@@ -512,8 +538,9 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		if(keyCode == KeyEvent.VK_ESCAPE){
 			//Get back to menu.
 			anyGameStart = false;
-			singlePlayStart = false;
+			numPlayers = 0;
 			multiGame = false;
+			gameOver = false;
 		}
 		
 	}
@@ -566,6 +593,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		}
 		
 	}
+	
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		
