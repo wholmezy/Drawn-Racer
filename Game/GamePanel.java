@@ -11,7 +11,7 @@ import java.awt.image.*;
 
 //Drawn Racer
 public class GamePanel extends JPanel implements Runnable, KeyListener {
-	//Fields
+	
 	public static int WIDTH = 800;
 	public static int HEIGHT = 800;
 	
@@ -276,8 +276,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 		g.drawString("FPS: " + (int) averageFPS, 10, 10);
 		g.setColor(Color.BLACK);
 		
-		
+		//StartScreen
 		if(!anyGameStart && !multiGame && numPlayers == 0){
+			
+			g.setFont(new Font("impact", Font.ITALIC, 60));
+			g.drawString("SLOW RACER", WIDTH / 2 - 150, HEIGHT / 2 - 155);
+			
 			g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
 			//g.drawString("Press Enter to start the game!", WIDTH / 2 - 130, HEIGHT / 2);
 			
@@ -294,7 +298,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				
 				g.setColor(Color.BLACK);
 			}
-			g.drawString("SINGLEPLAYER", WIDTH / 2 - 65, HEIGHT / 2 - 68);
+			g.drawString("SINGLEPLAYER", WIDTH / 2 - 45, HEIGHT / 2 - 68);
 			
 			g.setColor(Color.BLACK);
 			g.fillRect(WIDTH / 2 - 130,  HEIGHT / 2 - 32,  270,  50);
@@ -306,10 +310,11 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				
 				g.setColor(Color.BLACK);
 			}
-			g.drawString("MULTIPLAYER", WIDTH / 2 - 65, HEIGHT / 2);
+			g.drawString("MULTIPLAYER", WIDTH / 2 - 45, HEIGHT / 2);
 			
 			g.setColor(Color.BLACK);
 		}
+		//singlePlayer screen
 		else if(numPlayers == 1 && !gameOver){
 			// X start pos, Y start pos, X end pos, Y end pos
 			tileMap.draw(g);
@@ -320,8 +325,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			}
 			player.draw(g, true);
 		}
+		//Second menu for multiplayer games.
 		else if(multiGame){
+			g.setFont(new Font("impact", Font.ITALIC, 60));
+			g.drawString("SLOW RACER", WIDTH / 2 - 150, HEIGHT / 2 - 155);
 			
+			g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 20));
 			//Menu Select.
 			g.setColor(Color.BLACK);
 			g.fillRect(WIDTH / 2 - 130, HEIGHT / 2 - 100, 270, 50);
@@ -333,7 +342,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				
 				g.setColor(Color.BLACK);
 			}
-			g.drawString("2-Player Local", WIDTH / 2 - 65, HEIGHT / 2 - 68);
+			g.drawString("2-Player Local", WIDTH / 2 - 45, HEIGHT / 2 - 68);
 			
 			g.setColor(Color.BLACK);
 			g.fillRect(WIDTH / 2 - 130,  HEIGHT / 2 - 32,  270,  50);
@@ -345,12 +354,13 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 				
 				g.setColor(Color.BLACK);
 			}
-			g.drawString("3-Player Local", WIDTH / 2 - 65, HEIGHT / 2);
+			g.drawString("3-Player Local", WIDTH / 2 - 45, HEIGHT / 2);
 			
 			g.setColor(Color.BLACK);
 			
 			
 		}
+		//twoPlayer screen.
 		else if(numPlayers == 2 && !gameOver){
 			tileMap2.draw(g);
 			g.setColor(Color.BLACK);
@@ -362,6 +372,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener {
 			player1.draw(g, playerTurn1);
 			player2.draw(g, playerTurn2);
 		}
+		//Game over screen.
 		else if(gameOver){
 			String winner;
 			if(winningPlayer == 1){

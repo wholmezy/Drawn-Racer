@@ -187,11 +187,17 @@ public class Player {
 	
 	public void checkMap(int x, int y){
 		
+		
+		int checker;
+		
 		int colC = tileMap.getColTile(x);
 		int rowC = tileMap.getRowTile(y);
-		
-		int checker = tileMap.getTile(rowC, colC); 
-		
+		if(colC >= tileMap.getMapWidth() || colC <= 0 || rowC >= tileMap.getMapHeight() || rowC <= 0){
+			checker = 0;
+		}
+		else{
+			checker = tileMap.getTile(rowC, colC); 
+		}
 		if(checker == 0){
 			speedX = 0;
 			speedY = 0;
@@ -291,9 +297,6 @@ public class Player {
 				
 				
 				checkMap(x - width * topL, y - height * topL);
-				
-				
-				
 				//g.fillRect(carX - width * topL, carY - height * topL, width, height);
 				
 				topL++;
