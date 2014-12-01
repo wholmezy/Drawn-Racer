@@ -70,15 +70,25 @@ public class TileMap {
 				
 				if(rc == 0){
 					g.setColor(color2);
+					g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);
 				}
 				if(rc == 1){
 					g.setColor(color1);
+					g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);
 				}
 				if(rc == 2){
 					g.setColor(Color.RED);
+					g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);
+				}
+				if(rc == 3){
+					g.setColor(Color.MAGENTA);
+					g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);
+					g.setColor(Color.CYAN);
+					g.fillRect((x + col * tileSize) + tileSize / 3, (y + row * tileSize) + tileSize / 3, tileSize / 2, tileSize / 2);
+					
 				}
 				
-				g.fillRect(x + col * tileSize, y + row * tileSize, tileSize, tileSize);
+				
 			}
 		}
 	}

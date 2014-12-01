@@ -1,5 +1,6 @@
 package mainGame;
 import java.awt.*;
+import java.util.Random;
 
 public class Player {
 	
@@ -11,55 +12,134 @@ public class Player {
 	
 	private int speedX;
 	private int speedY;
+	private int randomize;
 	private int storeSpeedX;
 	private int storeSpeedY;
 	private int tempSpeedX;
 	private int tempSpeedY;
+	private int numTilPowUp;
+	private int powDec;
 	
-	private int numPlayer;
+	private char powerUp;
+	private String colorName;
+	Random randomer;
 	
 	private Color color1;
 	private Color color2;
-	private Color color3;
 	
 	private boolean left;
 	private boolean right;
 	private boolean up;
 	private boolean down;
 	private boolean start;
+	private boolean power;
+	private boolean havePowerUp;
+	private boolean haveUsedPowUp;
 	
 	private TileMap tileMap;
+	private PowerUps powerControl;
+
 	
-	public Player(TileMap tm, int color, int numPerson){
+	
+	public Player(TileMap tm, int color){
 		width = GamePanel.WIDTH / GamePanel.squareSize;
 		height = GamePanel.HEIGHT / GamePanel.squareSize;
 		
 		x = (GamePanel.WIDTH / GamePanel.squareSize);
 		y = (GamePanel.HEIGHT / 5);
 		
-		numPlayer = numPerson;
+		numTilPowUp = 0;
+		haveUsedPowUp = false;
+		havePowerUp = false;
+		randomer = new Random();
 		
 		speedX = 0;
 		speedY = 0;
 		storeSpeedX = 0;
 		storeSpeedY = 0;
+		powDec = 0;
 		
-		if(color == 1){
-			//Orange
-			color1 = new Color(255, 128, 0);
-			//Light Orange
-			color2 = new Color(255, 204, 153);
-			//Dark Orange
-			color3 = new Color(153, 76, 0);
+		
+		//Player colors.
+		switch(color){
+			case 1:
+				//Orange
+				color1 = new Color(255, 128, 0);
+				//Light Orange
+				color2 = new Color(255, 204, 153);
+				
+				colorName = "ORANGE";
+				break;
+			case 2:
+				//Dark Purple
+				color1 = new Color(76, 0, 153);
+				//Light Purple
+				color2 = new Color(229, 204, 255);
+				
+				colorName = "PURPLE";
+				break;
+			case 3:
+				//Dark Red
+				color1 = new Color(155, 0, 0);
+				//Light Red
+				color2 = new Color(255, 0, 0);
+				colorName = "RED";
+				break;
+			case 4:
+				//Dark Blue
+				color1 = new Color(0, 0, 153);
+				//Light Blue
+				color2 = new Color(0, 0, 255);
+				colorName = "BLUE";
+
+				break;
+			case 5:
+				//Dark Green
+				color1 = new Color(0, 155, 0);
+				//Light Green
+				color2 = new Color(0, 255, 0);
+				colorName = "GREEN";
+				break;
+			case 6:
+				//Dark Yellow
+				color1 = new Color(153, 153, 0);
+				//Light Yellow
+				color2 = new Color(255, 255, 255);
+				colorName = "YELLOW";
+				break;
+			case 7:
+				//Dark Cyan
+				color1 = new Color(0, 155, 155);
+				//Light Cyan
+				color2 = new Color(0, 255, 255);
+				colorName = "CYAN";
+				break;
+			case 8:
+				//Dark Brown
+				color1 = new Color(153, 76, 0);
+				//Light Brown
+				color2 = new Color(255, 128, 0);
+				colorName = "BROWN";
+				break;
+			case 9:
+				//Dark Wine
+				color1 = new Color(153, 0, 76);
+				//Light Wine
+				color2 = new Color(255, 0, 127);
+				colorName = "WINE";
+				break;
+			default:
+				//Dark slate Green
+				color1 = new Color(32, 178, 170);
+				//Light Pink
+				color2 = new Color(102, 205, 170);
+				colorName = "PINK";
+				break;
+		
+		
 		}
-		else{
-			//Dark Purple
-			color1 = new Color(76, 0, 153);
-			//Light Purple
-			color2 = new Color(229, 204, 255);
-			//Dark Purple
-			color3 = new Color(76, 0, 153);
-		}
+		
+		
 		
 		
 		start = false;
@@ -70,20 +150,49 @@ public class Player {
 	
 	public int getX(){ return x; }
 	public int getY(){ return y; }
+	public int getSpeedX() { return speedX; }
+	public int getSpeedY() { return speedY; }
+	public int getPowDec() { return powDec; }
+	public int getPowerUp(){ 
+		return Character.getNumericValue(powerUp); 
+	}
+	public boolean isPowerUp(){	return power; }
+	public boolean havePower(){ return haveUsedPowUp; }
 	public boolean getStart(){ return start; }
+	
+	
 	
 	public void setX(int dx){ x = dx; }
 	public void setY(int dy){ y = dy; }
+	public void setSpeedX(int x){ speedX = x; }
+	public void setSpeedY(int y){ speedY = y; }
 	
 	public void setStart(boolean b){ start = b; }
+	public void decPowDec() { 
+		if(powDec > 0){
+			powDec--; 
+		}
+	}
+	public void setPowerUp(boolean a){ havePowerUp = a; }
+	public void setUsePow(boolean b) { 
+		haveUsedPowUp = b; 
+		powDec = 2;
+	}
 	
 	public void setLeft(boolean b){ left = b;}
 	public void setRight(boolean b){ right = b;}
 	public void setDown(boolean b){ down = b;}
 	public void setUp(boolean b){ up = b;}
 	
-	public void update(int numPlayers){
-
+	public void update(){
+		if(havePowerUp && numTilPowUp >= 3){
+			//TODO
+			power = true;
+		}
+		else{
+			power = false;
+		}
+		
 		//move map
 		if(GamePanel.squareSize < 50){
 			tileMap.setx(GamePanel.WIDTH / 2 - x);
@@ -110,6 +219,15 @@ public class Player {
 		
 		x += speedX;
 		y += speedY;
+		
+		if(numTilPowUp < 3){
+			randomize = randomer.nextInt(590);
+			numTilPowUp++;
+		}
+		
+		
+		
+		
 		
 	}
 	public void update2(){
@@ -171,7 +289,32 @@ public class Player {
 		
 		
 		
-		g.setColor(color2);
+		//Power up Display
+		
+		char powerUps[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+				'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+		
+		
+		if(havePowerUp || powDec > 0){
+			g.setFont(new Font(g.getFont().getFontName(), Font.PLAIN, 12));
+			//Set text colour to black if powerup is ready.
+			if(powDec > 0){
+				g.setColor(Color.BLACK);
+			}
+			else if(numTilPowUp >= 3){
+				
+				powerUp = powerUps[randomize % powerUps.length];
+				
+				//powerUp test
+				g.setColor(Color.RED);
+				g.drawString(Character.toString(powerUp), 50, 50);
+				g.setColor(Color.GRAY);
+			}
+			else{
+				g.setColor(Color.WHITE);
+			}
+			g.drawString(Character.toString(powerUps[randomize % powerUps.length]), carX + 6, carY + 13);
+		}
 		
 		
 		//g.setColor(Color.RED);
@@ -184,6 +327,8 @@ public class Player {
 				accX + width / 2, //start x
 				accY + height / 2); //start Y*/
 	}
+	
+	
 	
 	public void checkMap(int x, int y){
 		
@@ -205,13 +350,14 @@ public class Player {
 		
 		if(checker == 2){
 			GamePanel.gameOver = true;
-			GamePanel.winningPlayer = numPlayer;
+			GamePanel.winner = colorName;
+		}
+		if(checker == 3){
+			havePowerUp = true;
+			numTilPowUp = 0;
 		}
 		
-		
 	}
-	
-	
 	
 	public int drawCheck(int speedX, int speedY, int xory){
 		
@@ -392,5 +538,6 @@ public class Player {
 			return speedY;
 		}
 	}
+
 	
 }
